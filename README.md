@@ -9,4 +9,4 @@ npm install
 ```
 webpack-dev-server --progress --colors
 ```
-http://localhost:8080/webpack-dev-server/
+[http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/)

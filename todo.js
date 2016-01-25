@@ -6,12 +6,18 @@ import ReactDOM from "react-dom";
 import Button from "react-bootstrap/lib/Button";
 
 var TodoApp = React.createClass({
+  getInitialState: function() {
+    return {todos: []};
+  },
+  onSubmit: function(form) {
+    this.setState({todos: this.state.todos.concat(React.findDOMNode(form.todo).value)});
+  },
   render: function() {
     return (
       <div className="TodoList">
         <h1>Tottoto Do</h1>
-        <TodoForm onCommentSubmit={this.handleCommentSubmit} />
-        <TodoList /> 
+        <TodoForm onSubmit={this.onSubmit} />
+        <TodoList todos={this.state.todos}/>
       </div>
     );
   }
@@ -19,10 +25,16 @@ var TodoApp = React.createClass({
 
 var TodoList = React.createClass({
   render: function() {
+    var todoNodes = this.props.todos.map(function (todo) {
+      return (
+        <li>
+          {todo}
+        </li>
+      );
+    });
     return (
         <ul className="TodoList">
-          <li>布団を干す</li>
-          <li>牛乳を買う</li>
+          {todoNodes}
         </ul>
     );
   }
@@ -32,19 +44,14 @@ var TodoList = React.createClass({
 var TodoForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var text = ReactDOM.findDOMNode(this.refs.text).value.trim();
-    if (!text) {
-      return;
-    }
-    ReactDOM.findDOMNode(this.refs.text).value = '';
-    return;
+    this.props.onSubmit(this.refs);
   },
   render: function() {
     return (
         <form className="TodoForm" onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="やるぞ!!!" ref="text"/>
+          <input type="text" placeholder="やるぞ!!!" ref="todo"/>
           <Button type="submit" bsStyle="info">
-            hogehoge
+            追加
           </Button>
         </form>
     );
