@@ -10,7 +10,7 @@ var TodoApp = React.createClass({
     return {todos: []};
   },
   onSubmit: function(form) {
-    this.setState({todos: this.state.todos.concat(React.findDOMNode(form.todo).value)});
+    this.setState({todos: this.state.todos.concat(ReactDOM.findDOMNode(form.todo).value)});
   },
   render: function() {
     return (
@@ -28,7 +28,11 @@ var TodoList = React.createClass({
     var todoNodes = this.props.todos.map(function (todo) {
       return (
         <li>
-          {todo}
+          <label for="foo">
+            <input type="checkbox">
+              {todo}
+            </input>
+          </label>
         </li>
       );
     });
