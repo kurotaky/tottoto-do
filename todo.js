@@ -9,8 +9,8 @@ var TodoApp = React.createClass({
   getInitialState: function() {
     return {todos: []};
   },
-  onSubmit: function(form) {
-    this.setState({todos: this.state.todos.concat(ReactDOM.findDOMNode(form.todo).value)});
+  onSubmit: function(todo) {
+    this.setState({todos: this.state.todos.concat(todo.value)});
   },
   render: function() {
     return (
@@ -23,41 +23,46 @@ var TodoApp = React.createClass({
   }
 });
 
-var TodoList = React.createClass({
+var TodoForm = React.createClass({
+  propTypes: {
+    onSubmit: React.PropTypes.func
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    this.props.onSubmit(this.refs.todo);
+    ReactDOM.findDOMNode(this.refs.todo).value = '';
+  },
   render: function() {
-    var todoNodes = this.props.todos.map(function (todo) {
+    return (
+        <form className="TodoForm" onSubmit={this.handleSubmit}>
+          <input type="text" placeholder="やること" ref="todo" required/>
+          <Button type="submit" bsStyle="info">
+            追加
+          </Button>
+        </form>
+    );
+  }
+});
+
+var TodoList = React.createClass({
+  propTypes: {
+    todos: React.PropTypes.array
+  },
+  render: function() {
+    var todoNodes = this.props.todos.map(function (todo, i) {
       return (
-        <li>
-          <label for="foo">
-            <input type="checkbox">
-              {todo}
-            </input>
+        <li key={"todo_" + i}>
+          <label htmlFor={"todo_" + i}>
+            <input type="checkbox" id={"todo_" + i}/>
+            {todo}
           </label>
         </li>
       );
     });
     return (
-        <ul className="TodoList">
-          {todoNodes}
-        </ul>
-    );
-  }
-});
-
-
-var TodoForm = React.createClass({
-  handleSubmit: function(e) {
-    e.preventDefault();
-    this.props.onSubmit(this.refs);
-  },
-  render: function() {
-    return (
-        <form className="TodoForm" onSubmit={this.handleSubmit}>
-          <input type="text" placeholder="やるぞ!!!" ref="todo"/>
-          <Button type="submit" bsStyle="info">
-            追加
-          </Button>
-        </form>
+      <ul className="TodoList">
+        {todoNodes}
+      </ul>
     );
   }
 });
