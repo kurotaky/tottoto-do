@@ -1,8 +1,13 @@
 body {
   background: #E4E4E4;
+  text-align:center;
 }
 
-.done {
+input[type=checkbox]:checked ~ span {
   text-decoration: line-through;
   color: grey;
+}
+
+input[type=checkbox] {
+  display: none;
 }

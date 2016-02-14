@@ -12,12 +12,15 @@ var TodoApp = React.createClass({
   onSubmit: function(todo) {
     this.setState({todos: this.state.todos.concat(todo.value)});
   },
+  removeAll: function() {
+    this.setState({todos: []});
+  },
   render: function() {
     return (
       <div className="TodoList">
         <h1>Tottoto Do</h1>
         <TodoForm onSubmit={this.onSubmit} />
-        <TodoList todos={this.state.todos}/>
+        <TodoList todos={this.state.todos} removeAll={this.removeAll}/>
       </div>
     );
   }
@@ -48,6 +51,9 @@ var TodoList = React.createClass({
   propTypes: {
     todos: React.PropTypes.array
   },
+  removeAll(e) {
+    this.props.removeAll();
+  },
   render: function() {
     var todoNodes = this.props.todos.map(function (todo, i) {
       return (
@@ -62,6 +68,7 @@ var TodoList = React.createClass({
     return (
       <ul className="TodoList">
         {todoNodes}
+        <Button type="button" bsStyle="danger" onClick={this.removeAll}>ToDoを削除</Button>
       </ul>
     );
   }
